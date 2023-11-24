@@ -138,10 +138,9 @@ async def doc(bot, update):
     await ms.delete()
     os.remove(file_path)
     if ph_path:
-        os.remove(ph_path)
-	    
-try:
-        if type == "video":
+        os.remove(ph_path)    
+try:	
+  if type == "video":
             # Apply the provided FFmpeg command
             os.system("-map 0 -c:s copy -c:a copy -c:v copy -metadata title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺" -metadata author="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺" -metadata:s:s title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺" -metadata:s:a title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺" -metadata:s:v title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺")
             await bot.send_video(
