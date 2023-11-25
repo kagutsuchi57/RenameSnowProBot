@@ -58,11 +58,7 @@ output_directory = "output_directory"
 
 if not os.path.exists(output_directory):
     os.makedirs(output_directory)
-    
-output_doc = "output_doc"
 
-if not os.path.exists(output_doc):
-    os.makedirs(output_doc)
 @Client.on_callback_query(filters.regex("upload"))
 async def doc(bot, update):
     new_name = update.message.text
@@ -118,6 +114,11 @@ async def doc(bot, update):
 
         if type == "document":
             if file.media == MessageMediaType.VIDEO:
+                # Check if the filename already has the ".mp4" extension
+                if not new_filename.lower().endswith(".mp4"):
+                    # If not, append it
+                    output_file_temp += ".mp4"
+
                 subprocess.run(['ffmpeg', '-i', file_path, '-c', 'copy', '-metadata', 
                                 'title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
                                 '-metadata', 'encoded_by=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
@@ -152,7 +153,7 @@ async def doc(bot, update):
                             '-metadata', 's:s:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova',
                             '-metadata', 's:a:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova',
                             '-strict', '-2', output_file_temp])
-            
+
             await bot.send_video(
                 update.message.chat.id,
                 video=output_file_temp,
@@ -172,19 +173,13 @@ async def doc(bot, update):
                 progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
     except Exception as e:
         os.remove(file_path)
-        os.remove(output_directory_temp)
-        os.remove(output_file_doc)
+        os.remove(output_file_temp)
         if ph_path:
             os.remove(ph_path)
-            os.remove(output_directory_temp)
-            os.remove(output_file_doc)
         return await ms.edit(f" Eʀʀᴏʀ {e}")
 
     await ms.delete()
     os.remove(file_path)
-    os.remove(output_directory_temp)
-    os.remove(output_file_doc)
+    os.remove(output_file_temp)
     if ph_path:
         os.remove(ph_path)
-        os.remove(output_file_doc)
-        os.remove(output_directory_temp)
