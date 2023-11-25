@@ -1,4 +1,4 @@
 echo "Running"
 git pull -f -q
-pip install --quite -r requirements.txt
+pip install --quiet -r requirements.txt
 python3 -m bot
