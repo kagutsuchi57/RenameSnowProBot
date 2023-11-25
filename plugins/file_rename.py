@@ -110,7 +110,6 @@ async def doc(bot, update):
     type = update.data.split("_")[1]
     try:
         output_file_temp = os.path.join(output_directory, f"{new_filename}.mp4")
-        output_file_doc = os.path.join(output_doc, f"{new_filename}")
 
         if type == "document":
             if file.media == MessageMediaType.VIDEO:
