@@ -113,11 +113,6 @@ async def doc(bot, update):
 
         if type == "document":
             if file.media == MessageMediaType.VIDEO:
-                # Check if the filename already has the ".mp4" extension
-                if not new_filename.lower().endswith(".mp4"):
-                    # If not, append it
-                    output_file_temp += ".mp4"
-
                 subprocess.run(['ffmpeg', '-i', file_path, '-c', 'copy', '-metadata', 
                                 'title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
                                 '-metadata', 'encoded_by=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
