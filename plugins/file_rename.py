@@ -122,7 +122,7 @@ async def doc(bot, update):
                             '-strict', '-2', output_file_temp])
             await bot.send_document(
                 update.message.chat.id,
-                document=file_path,
+                document=output_file_temp,
                 thumb=ph_path,
                 caption=caption,
                 progress=progress_for_pyrogram,
