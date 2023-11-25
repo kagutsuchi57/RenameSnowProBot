@@ -127,7 +127,6 @@ async def doc(bot, update):
                     document=output_file_temp,
                     caption=caption,
                     thumb=ph_path,
-                    duration=duration,
                     progress=progress_for_pyrogram,
                     progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
             else:
