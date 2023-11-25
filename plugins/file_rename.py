@@ -143,25 +143,24 @@ async def doc(bot, update):
                     progress=progress_for_pyrogram,
                     progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
         elif type == "video":
-            if not new_filename.lower().endswith(".mp4"):
-                output_file_temp += ".mp4"
-                subprocess.run(['ffmpeg', '-i', file_path, '-c', 'copy', '-metadata', 
-                                'title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
-                                '-metadata', 'encoded_by=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
-                                '-metadata', 's:s:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
-                                '-metadata', 's:a:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
-                                '-metadata', 's:v:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
-                                '-metadata', 's:s:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova',
-                                '-metadata', 's:a:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova',
-                                '-strict', '-2', output_file_temp])
-                await bot.send_video(
-                    update.message.chat.id,
-                    video=output_file_temp,
-                    caption=caption,
-                    thumb=ph_path,
-                    duration=duration,
-                    progress=progress_for_pyrogram,
-                    progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+            subprocess.run(['ffmpeg', '-i', file_path, '-c', 'copy', '-metadata', 
+                            'title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                            '-metadata', 'encoded_by=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                            '-metadata', 's:s:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                            '-metadata', 's:a:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                            '-metadata', 's:v:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                            '-metadata', 's:s:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova',
+                            '-metadata', 's:a:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova',
+                            '-strict', '-2', output_file_temp])
+
+            await bot.send_video(
+                update.message.chat.id,
+                video=output_file_temp,
+                caption=caption,
+                thumb=ph_path,
+                duration=duration,
+                progress=progress_for_pyrogram,
+                progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
         elif type == "audio":
             await bot.send_audio(
                 update.message.chat.id,
