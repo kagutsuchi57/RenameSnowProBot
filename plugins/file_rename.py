@@ -70,7 +70,7 @@ async def doc(bot, update):
 
     duration = 0
     try:
-        metadata = changeMetadata(file_path)
+        metadata = changeMetadata(f'ffmpeg -i {file_path} -map 0 -c:s copy -c:a copy -c:v copy -metadata title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖫𝗈𝗐_𝖬𝖻_𝖹𝗈𝗇𝖾" -metadata author="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖫𝗈𝗐_𝖬𝖻_𝖹𝗈𝗇𝖾" -metadata:s:s title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖫𝗈𝗐_𝖬𝖻_𝖹𝗈𝗇𝖾" -metadata:s:a title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖫𝗈𝗐_𝖬𝖻_𝖹𝗈𝗇𝖾" -metadata:s:v title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖫𝗈𝗐_𝖬𝖻_𝖹𝗈𝗇𝖾"
         if metadata.has("duration"):
             duration = metadata.get('duration').seconds
     except:
