@@ -172,7 +172,6 @@ async def doc(bot, update):
                 progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
     except Exception as e:
         os.remove(file_path)
-        os.remove(output_file_temp)
         if ph_path:
             os.remove(ph_path)
         return await ms.edit(f" Eʀʀᴏʀ {e}")
