@@ -4,6 +4,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceRepl
 
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+import ffmpeg
 
 from helper.utils import progress_for_pyrogram, convert, humanbytes
 from helper.database import db
