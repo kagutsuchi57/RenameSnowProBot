@@ -56,7 +56,7 @@ async def refunc(client, message):
         )
 
 
-@app.on_callback_query(filters.regex("upload"))
+@Client.on_callback_query(filters.regex("upload"))
 async def doc(bot, update):
     new_name = update.message.text
     new_filename = new_name.split(":-")[1]
