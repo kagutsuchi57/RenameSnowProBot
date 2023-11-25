@@ -135,25 +135,7 @@ async def doc(bot, update):
             os.remove(ph_path)
         return await ms.edit(f" Eʀʀᴏʀ {e}")
 
- file_info = bot.get_file(message.document.file_id)
-        downloaded_file = bot.download_file(file_info.file_path)
-        
-        # Process the received file
-        with open('received_file.ext', 'wb') as new_file:  # Replace 'ext' with the actual file extension
-            new_file.write(downloaded_file)
-            
-            # Edit metadata using FFmpeg
-            file_path = 'received_file.ext'  # Replace 'ext' with the actual file extension
-            ffmpeg.input(file_path).output(file_path, metadata={'title': 'New Title', 'artist': 'New Artist'}).run()
-        
-        # Send a response
-        bot.reply_to(message, "File metadata edited successfully!")
-            
-    except Exception as e:
-        bot.reply_to(message, "Error processing the file: " + str(e))
-
-	
     await ms.delete()
     os.remove(file_path)
     if ph_path:
-        os.remove(ph_path)    
+        os.remove(ph_path)
