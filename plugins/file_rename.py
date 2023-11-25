@@ -56,7 +56,7 @@ async def refunc(client, message):
         )
 
 
-@Client.on_callback_query(filters.regex("upload"))
+@app.on_callback_query(filters.regex("upload"))
 async def doc(bot, update):
     new_name = update.message.text
     new_filename = new_name.split(":-")[1]
@@ -106,6 +106,7 @@ async def doc(bot, update):
     await ms.edit("⚠️__**Please wait...**__\n**Tʀyɪɴɢ Tᴏ Uᴩʟᴏᴀᴅɪɴɢ....**")
     type = update.data.split("_")[1]
     try:
+        output_file_temp = os.path.join("output_directory", f"{new_filename}_output_temp.mp4")
         if type == "document":
             await bot.send_document(
                 update.message.chat.id,
@@ -115,7 +116,7 @@ async def doc(bot, update):
                 progress=progress_for_pyrogram,
                 progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
         elif type == "video":
-            ffmpeg.input(file_path).output(file_path, c="copy", metadata={
+            ffmpeg.input(file_path).output(output_file_temp, c="copy", metadata={
                 'title': "𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺",
                 'author': "𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺",
                 's:s:0': "𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺",
@@ -126,7 +127,7 @@ async def doc(bot, update):
             }).run()
             await bot.send_video(
                 update.message.chat.id,
-                video=file_path,
+                video=output_file_temp,
                 caption=caption,
                 thumb=ph_path,
                 duration=duration,
@@ -146,6 +147,11 @@ async def doc(bot, update):
         if ph_path:
             os.remove(ph_path)
         return await ms.edit(f" Eʀʀᴏʀ {e}")
+
+    await ms.delete()
+    os.remove(file_path)
+    if ph_path:
+        os.remove(ph_path)
 
     await ms.delete()
     os.remove(file_path)
