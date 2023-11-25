@@ -1,15 +1,18 @@
 import subprocess
+
 from pyrogram import Client, filters
 from pyrogram.enums import MessageMediaType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply
+
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+import ffmpeg
+
 from helper.utils import progress_for_pyrogram, convert, humanbytes
 from helper.database import db
 from PIL import Image
 import os
 import time
-
 @Client.on_callback_query(filters.regex('rename'))
 async def rename(bot, update):
     user_id = update.message.chat.id
@@ -18,7 +21,6 @@ async def rename(bot, update):
     await update.message.reply_text("__𝙿𝚕𝚎𝚊𝚜𝚎 𝙴𝚗𝚝𝚎𝚛 𝙽𝚎𝚠 𝙵𝚒𝚕𝚎𝙽𝚊𝚖𝚎...__",    
     reply_to_message_id=update.message.reply_to_message.id,  
     reply_markup=ForceReply(True))
-
 @Client.on_message(filters.private & filters.reply)
 async def refunc(client, message):
     reply_message = message.reply_to_message
@@ -35,7 +37,6 @@ async def refunc(client, message):
                 extn = "mkv"
             new_name = new_name + "." + extn
         await reply_message.delete()
-
         button = [[InlineKeyboardButton(
             "📁 Dᴏᴄᴜᴍᴇɴᴛ", callback_data="upload_document")]]
         if file.media in [MessageMediaType.VIDEO, MessageMediaType.DOCUMENT]:
@@ -49,40 +50,33 @@ async def refunc(client, message):
             reply_to_message_id=file.id,
             reply_markup=InlineKeyboardMarkup(button)
         )
-
 output_directory = "output_directory"
-
 if not os.path.exists(output_directory):
     os.makedirs(output_directory)
-
 @Client.on_callback_query(filters.regex("upload"))
 async def doc(bot, update):
     new_name = update.message.text
     new_filename = new_name.split(":-")[1]
     file_path = f"downloads/{new_filename}"
     file = update.message.reply_to_message
-
     ms = await update.message.edit("⚠️__**Please wait...**__\n**Tʀyɪɴɢ Tᴏ Dᴏᴡɴʟᴏᴀᴅɪɴɢ....**")
     try:
         await bot.download_media(message=file, file_name=file_path, progress=progress_for_pyrogram,
                                   progress_args=("\n⚠️__**Please wait...**__\n\n☃️ **Dᴏᴡɴʟᴏᴀᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
     except Exception as e:
         return await ms.edit(str(e))
-
     duration = 0
     try:
         metadata = extractMetadata(createParser(file_path))
         if metadata.has("duration"):
             duration = metadata.get('duration').seconds
-    except Exception as e:
-        print(f"Metadata extraction error: {e}")
-
+    except:
+        pass
     ph_path = None
     user_id = int(update.message.chat.id)
     media = getattr(file, file.media.value)
     c_caption = await db.get_caption(update.message.chat.id)
     c_thumb = await db.get_thumbnail(update.message.chat.id)
-
     if c_caption:
         try:
             caption = c_caption.format(filename=new_filename, filesize=humanbytes(
@@ -92,7 +86,6 @@ async def doc(bot, update):
                 text=f"Yᴏᴜʀ Cᴀᴩᴛɪᴏɴ Eʀʀᴏʀ Exᴄᴇᴩᴛ Kᴇyᴡᴏʀᴅ Aʀɢᴜᴍᴇɴᴛ ●> ({e})")
     else:
         caption = f"**{new_filename}**"
-
     if (media.thumbs or c_thumb):
         if c_thumb:
             ph_path = await bot.download_media(c_thumb)
@@ -102,20 +95,22 @@ async def doc(bot, update):
         img = Image.open(ph_path)
         img.resize((320, 320))
         img.save(ph_path, "JPEG")
-
     await ms.edit("⚠️__**Please wait...**__\n**Tʀyɪɴɢ Tᴏ Uᴩʟᴏᴀᴅɪɴɢ....**")
     type = update.data.split("_")[1]
     try:
         output_file_temp = os.path.join(output_directory, f"{new_filename}.mp4")
 
         if type == "document":
-            if file.media == MessageMediaType.VIDEO:
-                subprocess.run(['ffmpeg', '-i', file_path, '-c', 'copy',
-                                '-metadata', 'title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺,encoded_by=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺,'
-                                's:s:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺,s:a:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺,'
-                                's:v:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺,s:s:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova,'
-                                's:a:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova', '-strict', '-2', output_file_temp])
-
+            if file.media.mime_type == 'video/mp4' or file.media.mime_type == 'video/mkv':
+                subprocess.run(['ffmpeg', '-i', file_path, '-c', 'copy', '-metadata', 
+                                'title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                                '-metadata', 'encoded_by=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                                '-metadata', 's:s:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                                '-metadata', 's:a:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                                '-metadata', 's:v:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                                '-metadata', 's:s:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova',
+                                '-metadata', 's:a:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova',
+                                '-strict', '-2', output_file_temp])
                 await bot.send_document(
                     update.message.chat.id,
                     document=output_file_temp,
@@ -132,11 +127,15 @@ async def doc(bot, update):
                     progress=progress_for_pyrogram,
                     progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
         elif type == "video":
-            subprocess.run(['ffmpeg', '-i', file_path, '-c', 'copy',
-                            '-metadata', 'title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺,encoded_by=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺,'
-                            's:s:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺,s:a:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺,'
-                            's:v:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺,s:s:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova,'
-                            's:a:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova', '-strict', '-2', output_file_temp])
+            subprocess.run(['ffmpeg', '-i', file_path, '-c', 'copy', '-metadata', 
+                            'title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                            '-metadata', 'encoded_by=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                            '-metadata', 's:s:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                            '-metadata', 's:a:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                            '-metadata', 's:v:0=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺',
+                            '-metadata', 's:s:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova',
+                            '-metadata', 's:a:1=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova',
+                            '-strict', '-2', output_file_temp])
 
             await bot.send_video(
                 update.message.chat.id,
@@ -154,13 +153,12 @@ async def doc(bot, update):
                 thumb=ph_path,
                 duration=duration,
                 progress=progress_for_pyrogram,
-                progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+                progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
     except Exception as e:
         os.remove(file_path)
         if ph_path:
             os.remove(ph_path)
         return await ms.edit(f" Eʀʀᴏʀ {e}")
-
     await ms.delete()
     os.remove(file_path)
     if ph_path:
