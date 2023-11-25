@@ -6,7 +6,7 @@ class Config(object):
     # pyro client config
     API_ID    = os.environ.get("API_ID", "27744380")
     API_HASH  = os.environ.get("API_HASH", "08f3fd61ccd1aa4aa6ccdb716fb68fed")
-    BOT_TOKEN = os.environ.get("BOT_TOKEN", "6067754375:AAEbwJB_DkWT9UAwQ9UMUfQUQ2MAWvo-viQ")
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", "5555986769:AAG-nNw82PHwBPlPZ5h55d3hnfHxzqc5JeI")
     BOT_USERNAME = os.environ.get("BOT_USERNAME", "RenameSnowProBot")
    
     # database config
