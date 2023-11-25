@@ -173,10 +173,7 @@ async def doc(bot, update):
 
     await ms.delete()
     os.remove(file_path)
+    os.remove(output_directory)
     if ph_path:
         os.remove(ph_path)
-
-    await ms.delete()
-    os.remove(file_path)
-    if ph_path:
-        os.remove(ph_path)
+        os.remove(output_directory)
