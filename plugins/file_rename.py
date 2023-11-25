@@ -55,6 +55,10 @@ async def refunc(client, message):
             reply_markup=InlineKeyboardMarkup(button)
         )
 
+output_directory = "output_directory"
+
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
 
 @Client.on_callback_query(filters.regex("upload"))
 async def doc(bot, update):
