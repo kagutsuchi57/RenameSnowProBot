@@ -2,7 +2,7 @@ import subprocess
 
 from pyrogram import Client, filters
 from pyrogram.enums import MessageMediaType
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply, Video
 
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
