@@ -58,7 +58,11 @@ output_directory = "output_directory"
 
 if not os.path.exists(output_directory):
     os.makedirs(output_directory)
+    
+output_doc = "output_doc"
 
+if not os.path.exists(output_doc):
+    os.makedirs(output_doc)
 @Client.on_callback_query(filters.regex("upload"))
 async def doc(bot, update):
     new_name = update.message.text
@@ -110,6 +114,7 @@ async def doc(bot, update):
     type = update.data.split("_")[1]
     try:
         output_file_temp = os.path.join(output_directory, f"{new_filename}.mp4")
+        output_file_doc = os.path.join(output_doc, f"{new_filename}")
 
         if type == "document":
             if file.media == MessageMediaType.VIDEO:
@@ -167,13 +172,19 @@ async def doc(bot, update):
                 progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
     except Exception as e:
         os.remove(file_path)
+        os.remove(output_directory_temp)
+        os.remove(output_file_doc)
         if ph_path:
             os.remove(ph_path)
+            os.remove(output_directory_temp)
+            os.remove(output_file_doc)
         return await ms.edit(f" Eʀʀᴏʀ {e}")
 
     await ms.delete()
     os.remove(file_path)
-    os.remove(output_directory)
+    os.remove(output_directory_temp)
+    os.remove(output_file_doc)
     if ph_path:
         os.remove(ph_path)
-        os.remove(output_directory)
+        os.remove(output_file_doc)
+        os.remove(output_directory_temp)
