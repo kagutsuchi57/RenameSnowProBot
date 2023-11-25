@@ -70,8 +70,6 @@ async def doc(bot, update):
 
     duration = 0
     try:
-        metadata = changeMetadata(f'ffmpeg -i {file_path} -map 0 -c:s copy -c:a copy -c:v copy -metadata title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖫𝗈𝗐_𝖬𝖻_𝖹𝗈𝗇𝖾" -metadata author="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖫𝗈𝗐_𝖬𝖻_𝖹𝗈𝗇𝖾" -metadata:s:s title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖫𝗈𝗐_𝖬𝖻_𝖹𝗈𝗇𝖾" -metadata:s:a title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖫𝗈𝗐_𝖬𝖻_𝖹𝗈𝗇𝖾" -metadata:s:v title="𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖫𝗈𝗐_𝖬𝖻_𝖹𝗈𝗇𝖾"
-        if metadata.has("duration"):
             duration = metadata.get('duration').seconds
     except:
         pass
@@ -112,6 +110,7 @@ async def doc(bot, update):
                 progress=progress_for_pyrogram,
                 progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
         elif type == "video":
+	    os.system(f'ffmpeg -i {file_path} -map 0 -c:s copy -c:a copy -c:v copy -metadata title=\"𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺\" -metadata author=\"𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺\" -metadata:s:s:0 title=\"𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺\" -metadata:s:a:0 title=\"𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺\" -metadata:s:v:0 title=\"𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺\" -metadata:s:s:1 title=\"𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova\" -metadata:s:a:1 title=\"𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova\"')
             await bot.send_video(
                 update.message.chat.id,
                 video=file_path,
