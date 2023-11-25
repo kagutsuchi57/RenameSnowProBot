@@ -11,4 +11,4 @@ filetype
 moviepy
 hurry.filesize
 git+https://github.com/Snowball-0/mega.py.git
-python-ffmpeg
+ffmpeg-python
