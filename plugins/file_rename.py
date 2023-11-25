@@ -70,8 +70,7 @@ async def doc(bot, update):
 
     duration = 0
     try:
-        metadata = changeMetadata(file_path = 'received_file.ext')
-            ffmpeg.input(file_path).output(file_path, metadata={'title': 'New Title', 'artist': 'New Artist'}).run)
+        metadata = changeMetadata(file_path)
         if metadata.has("duration"):
             duration = metadata.get('duration').seconds
     except:
