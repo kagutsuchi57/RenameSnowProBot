@@ -134,13 +134,24 @@ async def doc(bot, update):
         if ph_path:
             os.remove(ph_path)
         return await ms.edit(f" Eʀʀᴏʀ {e}")
-try:
-        if type == "video":
-            # Apply the provided FFmpeg command
-            os.system(f'ffmpeg -i {file_path} code')
-            await bot.send_video()
-		
-os.system("f'ffmpeg -i {file_path} -map 0 -c:s copy -c:a copy -c:v copy -metadata title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺 -metadata author=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺 -metadata:s:s:0 title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺 -metadata:s:a:0 title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺 -metadata:s:v:0 title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎𝗉𝖾𝗋𝗇𝗈𝗏𝖺 -metadata:s:s:1 title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova -metadata:s:a:1 title=𝖳𝖾𝗅𝖾𝗀𝗋𝖺𝗆:@𝖠𝗇𝗂𝗆𝖾 𝖲𝗎pernova")
+
+ file_info = bot.get_file(message.document.file_id)
+        downloaded_file = bot.download_file(file_info.file_path)
+        
+        # Process the received file
+        with open('received_file.ext', 'wb') as new_file:  # Replace 'ext' with the actual file extension
+            new_file.write(downloaded_file)
+            
+            # Edit metadata using FFmpeg
+            file_path = 'received_file.ext'  # Replace 'ext' with the actual file extension
+            ffmpeg.input(file_path).output(file_path, metadata={'title': 'New Title', 'artist': 'New Artist'}).run()
+        
+        # Send a response
+        bot.reply_to(message, "File metadata edited successfully!")
+            
+    except Exception as e:
+        bot.reply_to(message, "Error processing the file: " + str(e))
+
 	
     await ms.delete()
     os.remove(file_path)
